@@ -1,0 +1,57 @@
+[
+  {
+    "title": "Welcome to My Markdown Blog",
+    "description": "An introduction to this blog and how it's built with markdown files and GitHub Actions",
+    "date": "2024-01-15",
+    "author": "Blog Author",
+    "tags": [
+      "welcome",
+      "markdown",
+      "github-actions",
+      "blogging"
+    ],
+    "url": "welcome-to-my-blog.html",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Adams_The_Tetons_and_the_Snake_River.jpg/640px-Adams_The_Tetons_and_the_Snake_River.jpg",
+    "caption": "The Tetons and the Snake River"
+  },
+  {
+    "title": "Monospace Design System Showcase",
+    "description": "A comprehensive demonstration of the utility classes and components available in our monospace web design system",
+    "date": "2024-01-12",
+    "author": "Blog Author",
+    "tags": [
+      "design",
+      "monospace",
+      "css",
+      "typography"
+    ],
+    "url": "monospace-design-showcase.html",
+    "image": "",
+    "caption": ""
+  },
+  {
+    "title": "Building Automated Workflows with GitHub Actions",
+    "description": "Learn how to automate your development workflow using GitHub Actions for continuous integration and deployment",
+    "date": "2024-01-10",
+    "author": "Blog Author",
+    "tags": [
+      "github-actions",
+      "ci-cd",
+      "automation",
+      "devops"
+    ],
+    "url": "building-with-github-actions.html",
+    "image": "",
+    "caption": ""
+  },
+  {
+    "title": "About This Blog",
+    "description": "Learn more about this markdown-powered blog and its creator",
+    "date": "2024-01-01",
+    "author": "Blog Author",
+    "tags": [],
+    "url": "about.html",
+    "image": "",
+    "caption": ""
+  }
+]

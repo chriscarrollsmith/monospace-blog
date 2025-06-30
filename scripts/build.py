@@ -10,6 +10,7 @@ import mistletoe
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 import re
+import json
 
 
 class BlogGenerator:
@@ -131,12 +132,55 @@ class BlogGenerator:
         
         print(f"Generated: {post['metadata']['url']}")
     
+    def generate_posts_json(self, posts):
+        """Generate a JSON file with all posts data for client-side pagination and filtering."""
+        posts_data = []
+        
+        for post in posts:
+            # Convert datetime to string for JSON serialization
+            post_data = {
+                'title': post['metadata']['title'],
+                'description': post['metadata']['description'],
+                'date': post['metadata']['date'].strftime('%Y-%m-%d'),
+                'author': post['metadata'].get('author', ''),
+                'tags': post['metadata'].get('tags', []),
+                'url': post['metadata']['url'],
+                'image': post['metadata'].get('image', ''),
+                'caption': post['metadata'].get('caption', '')
+            }
+            posts_data.append(post_data)
+        
+        output_path = os.path.join(self.output_dir, 'static', 'posts.json')
+        with open(output_path, 'w', encoding='utf-8') as f:
+            json.dump(posts_data, f, indent=2)
+        
+        print("Generated: static/posts.json")
+    
     def generate_index_html(self, posts):
-        """Generate the homepage with post previews."""
+        """Generate the homepage with post previews and pagination."""
         template = self.env.get_template('index.html')
         
+        # Only show first 20 posts for initial render
+        posts_per_page = 20
+        initial_posts = posts[:posts_per_page]
+        
+        # Get all unique tags for filtering
+        all_tags = set()
+        for post in posts:
+            if post['metadata'].get('tags'):
+                all_tags.update(post['metadata']['tags'])
+        
+        # Calculate pagination info
+        total_posts = len(posts)
+        total_pages = (total_posts + posts_per_page - 1) // posts_per_page
+        
         html = template.render(
-            posts=posts,
+            posts=initial_posts,
+            total_posts=total_posts,
+            total_pages=total_pages,
+            posts_per_page=posts_per_page,
+            current_page=1,
+            all_tags=sorted(list(all_tags)),
             site_title="My Blog",
             site_description="A blog generated from markdown files"
         )
@@ -195,6 +239,9 @@ class BlogGenerator:
         # Generate individual post pages
         for post in posts:
             self.generate_post_html(post)
+        
+        # Generate posts JSON for client-side functionality
+        self.generate_posts_json(posts)
         
         # Generate homepage
         self.generate_index_html(posts)

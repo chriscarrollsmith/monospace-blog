@@ -5,45 +5,93 @@
 
 {% block content %}
 {% if posts %}
-    {% for post in posts %}
-    <article>
-        <h2><a href="{{ post.metadata.url }}">{{ post.metadata.title }}</a></h2>
-        
+    <!-- Tag Filter Controls -->
+    <div class="filter-controls">
         <div class="grid">
-            <p>
-                <time datetime="{{ post.metadata.date.strftime('%Y-%m-%d') }}">
-                    {{ post.metadata.date.strftime('%Y-%m-%d') }}
-                </time>
-                {% if post.metadata.author %}
-                · by {{ post.metadata.author }}
-                {% endif %}
-            </p>
-            {% if post.metadata.tags %}
-            <p>
-                Tags: 
-                {% for tag in post.metadata.tags %}
-                    <code>{{ tag }}</code>{% if not loop.last %}, {% endif %}
-                {% endfor %}
-            </p>
-            {% endif %}
+            <div class="width-auto">
+                <p>Filter by tag:</p>
+                <div class="tag-filters">
+                    {% for tag in all_tags %}
+                        <button class="tag-filter" data-tag="{{ tag }}">{{ tag }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="width-min">
+                <button class="clear-filters">Clear filters</button>
+            </div>
         </div>
-        
-        <p>{{ post.metadata.description }}</p>
-        
-        {% if post.metadata.image %}
-        <figure>
-            <img src="{{ post.metadata.image }}" alt="{{ post.metadata.title }}" loading="lazy">
-            {% if post.metadata.caption %}
-            <figcaption>{{ post.metadata.caption }}</figcaption>
-            {% endif %}
-        </figure>
-        {% endif %}
-        
-        <p><a href="{{ post.metadata.url }}">Read more →</a></p>
-    </article>
+        <div class="active-filter" style="display: none;">
+            <p>Showing posts tagged with: <strong class="current-tag"></strong></p>
+        </div>
+    </div>
     
-    {% if not loop.last %}<hr>{% endif %}
-    {% endfor %}
+    <hr>
+    
+    <!-- Posts Container -->
+    <div id="posts-container">
+        {% for post in posts %}
+        <article>
+            <h2><a href="{{ post.metadata.url }}">{{ post.metadata.title }}</a></h2>
+            
+            <div class="grid">
+                <p>
+                    <time datetime="{{ post.metadata.date.strftime('%Y-%m-%d') }}">
+                        {{ post.metadata.date.strftime('%Y-%m-%d') }}
+                    </time>
+                    {% if post.metadata.author %}
+                    · by {{ post.metadata.author }}
+                    {% endif %}
+                </p>
+                {% if post.metadata.tags %}
+                <p>
+                    Tags: 
+                    {% for tag in post.metadata.tags %}
+                        <button class="tag-link" data-tag="{{ tag }}">{{ tag }}</button>{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+                {% endif %}
+            </div>
+            
+            <p>{{ post.metadata.description }}</p>
+            
+            {% if post.metadata.image %}
+            <figure>
+                <img src="{{ post.metadata.image }}" alt="{{ post.metadata.title }}" loading="lazy">
+                {% if post.metadata.caption %}
+                <figcaption>{{ post.metadata.caption }}</figcaption>
+                {% endif %}
+            </figure>
+            {% endif %}
+            
+            <p><a href="{{ post.metadata.url }}">Read more →</a></p>
+        </article>
+        
+        {% if not loop.last %}<hr>{% endif %}
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination Controls -->
+    <div class="pagination-controls">
+        <hr>
+        <div class="grid">
+            <div class="width-auto">
+                <p class="pagination-info">
+                    Showing <span class="current-start">1</span>-<span class="current-end">{{ posts|length }}</span> 
+                    of <span class="total-posts">{{ total_posts }}</span> posts
+                </p>
+            </div>
+            <div class="width-min">
+                <nav class="pagination">
+                    <button class="pagination-btn" id="prev-page" disabled>← Previous</button>
+                    <span class="pagination-pages">
+                        Page <span class="current-page">1</span> of <span class="total-pages">{{ total_pages }}</span>
+                    </span>
+                    <button class="pagination-btn" id="next-page" {% if total_pages <= 1 %}disabled{% endif %}>Next →</button>
+                </nav>
+            </div>
+        </div>
+    </div>
+    
 {% else %}
     <article>
         <h2>No posts yet</h2>
@@ -67,4 +115,176 @@ This is the content of my first post!</code></pre>
         </details>
     </article>
 {% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Blog pagination and filtering functionality
+class BlogPagination {
+    constructor() {
+        this.posts = [];
+        this.filteredPosts = [];
+        this.currentPage = 1;
+        this.postsPerPage = {{ posts_per_page }};
+        this.currentTag = null;
+        
+        this.loadPosts();
+        this.initEventListeners();
+    }
+    
+    async loadPosts() {
+        try {
+            const response = await fetch('static/posts.json');
+            this.posts = await response.json();
+            this.filteredPosts = [...this.posts];
+        } catch (error) {
+            console.error('Error loading posts:', error);
+        }
+    }
+    
+    initEventListeners() {
+        // Pagination buttons
+        document.getElementById('prev-page').addEventListener('click', () => {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.renderPage();
+            }
+        });
+        
+        document.getElementById('next-page').addEventListener('click', () => {
+            const totalPages = Math.ceil(this.filteredPosts.length / this.postsPerPage);
+            if (this.currentPage < totalPages) {
+                this.currentPage++;
+                this.renderPage();
+            }
+        });
+        
+        // Tag filters
+        document.querySelectorAll('.tag-filter, .tag-link').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const tag = e.target.dataset.tag;
+                this.filterByTag(tag);
+            });
+        });
+        
+        // Clear filters
+        document.querySelector('.clear-filters').addEventListener('click', () => {
+            this.clearFilters();
+        });
+    }
+    
+    filterByTag(tag) {
+        this.currentTag = tag;
+        this.currentPage = 1;
+        this.filteredPosts = this.posts.filter(post => 
+            post.tags && post.tags.includes(tag)
+        );
+        
+        // Update UI
+        document.querySelector('.active-filter').style.display = 'block';
+        document.querySelector('.current-tag').textContent = tag;
+        
+        // Highlight active tag filter
+        document.querySelectorAll('.tag-filter').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tag === tag);
+        });
+        
+        this.renderPage();
+    }
+    
+    clearFilters() {
+        this.currentTag = null;
+        this.currentPage = 1;
+        this.filteredPosts = [...this.posts];
+        
+        // Update UI
+        document.querySelector('.active-filter').style.display = 'none';
+        document.querySelectorAll('.tag-filter').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        this.renderPage();
+    }
+    
+    renderPage() {
+        const start = (this.currentPage - 1) * this.postsPerPage;
+        const end = start + this.postsPerPage;
+        const postsToShow = this.filteredPosts.slice(start, end);
+        
+        this.renderPosts(postsToShow);
+        this.updatePaginationInfo();
+    }
+    
+    renderPosts(posts) {
+        const container = document.getElementById('posts-container');
+        
+        if (posts.length === 0) {
+            container.innerHTML = `
+                <article>
+                    <h2>No posts found</h2>
+                    <p>No posts match the current filter. <button class="clear-filters" onclick="blogPagination.clearFilters()">Clear filters</button> to see all posts.</p>
+                </article>
+            `;
+            return;
+        }
+        
+        container.innerHTML = posts.map((post, index) => `
+            <article>
+                <h2><a href="${post.url}">${post.title}</a></h2>
+                
+                <div class="grid">
+                    <p>
+                        <time datetime="${post.date}">${post.date}</time>
+                        ${post.author ? `· by ${post.author}` : ''}
+                    </p>
+                    ${post.tags && post.tags.length > 0 ? `
+                    <p>
+                        Tags: 
+                        ${post.tags.map(tag => `<button class="tag-link" data-tag="${tag}" onclick="blogPagination.filterByTag('${tag}')">${tag}</button>`).join(', ')}
+                    </p>
+                    ` : ''}
+                </div>
+                
+                <p>${post.description}</p>
+                
+                ${post.image ? `
+                <figure>
+                    <img src="${post.image}" alt="${post.title}" loading="lazy">
+                    ${post.caption ? `<figcaption>${post.caption}</figcaption>` : ''}
+                </figure>
+                ` : ''}
+                
+                <p><a href="${post.url}">Read more →</a></p>
+            </article>
+            ${index < posts.length - 1 ? '<hr>' : ''}
+        `).join('');
+    }
+    
+    updatePaginationInfo() {
+        const totalPages = Math.ceil(this.filteredPosts.length / this.postsPerPage);
+        const start = (this.currentPage - 1) * this.postsPerPage + 1;
+        const end = Math.min(this.currentPage * this.postsPerPage, this.filteredPosts.length);
+        
+        // Update pagination info
+        document.querySelector('.current-start').textContent = start;
+        document.querySelector('.current-end').textContent = end;
+        document.querySelector('.total-posts').textContent = this.filteredPosts.length;
+        document.querySelector('.current-page').textContent = this.currentPage;
+        document.querySelector('.total-pages').textContent = totalPages;
+        
+        // Update button states
+        document.getElementById('prev-page').disabled = this.currentPage === 1;
+        document.getElementById('next-page').disabled = this.currentPage === totalPages;
+        
+        // Hide pagination if only one page
+        const paginationControls = document.querySelector('.pagination-controls');
+        paginationControls.style.display = totalPages <= 1 ? 'none' : 'block';
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.blogPagination = new BlogPagination();
+});
+</script>
 {% endblock %} 

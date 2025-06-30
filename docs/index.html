@@ -49,148 +49,216 @@
     <main>
         
 
-    
-    <article>
-        <h2><a href="welcome-to-my-blog.html">Welcome to My Markdown Blog</a></h2>
-        
+    <!-- Tag Filter Controls -->
+    <div class="filter-controls">
         <div class="grid">
-            <p>
-                <time datetime="2024-01-15">
-                    2024-01-15
-                </time>
-                
-                · by Blog Author
-                
-            </p>
-            
-            <p>
-                Tags: 
-                
-                    <code>welcome</code>, 
-                
-                    <code>markdown</code>, 
-                
-                    <code>github-actions</code>, 
-                
-                    <code>blogging</code>
-                
-            </p>
-            
+            <div class="width-auto">
+                <p>Filter by tag:</p>
+                <div class="tag-filters">
+                    
+                        <button class="tag-filter" data-tag="automation">automation</button>
+                    
+                        <button class="tag-filter" data-tag="blogging">blogging</button>
+                    
+                        <button class="tag-filter" data-tag="ci-cd">ci-cd</button>
+                    
+                        <button class="tag-filter" data-tag="css">css</button>
+                    
+                        <button class="tag-filter" data-tag="design">design</button>
+                    
+                        <button class="tag-filter" data-tag="devops">devops</button>
+                    
+                        <button class="tag-filter" data-tag="github-actions">github-actions</button>
+                    
+                        <button class="tag-filter" data-tag="markdown">markdown</button>
+                    
+                        <button class="tag-filter" data-tag="monospace">monospace</button>
+                    
+                        <button class="tag-filter" data-tag="typography">typography</button>
+                    
+                        <button class="tag-filter" data-tag="welcome">welcome</button>
+                    
+                </div>
+            </div>
+            <div class="width-min">
+                <button class="clear-filters">Clear filters</button>
+            </div>
         </div>
-        
-        <p>An introduction to this blog and how it's built with markdown files and GitHub Actions</p>
-        
-        
-        <figure>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Adams_The_Tetons_and_the_Snake_River.jpg/640px-Adams_The_Tetons_and_the_Snake_River.jpg" alt="Welcome to My Markdown Blog" loading="lazy">
-            
-            <figcaption>The Tetons and the Snake River</figcaption>
-            
-        </figure>
-        
-        
-        <p><a href="welcome-to-my-blog.html">Read more →</a></p>
-    </article>
+        <div class="active-filter" style="display: none;">
+            <p>Showing posts tagged with: <strong class="current-tag"></strong></p>
+        </div>
+    </div>
     
     <hr>
     
-    <article>
-        <h2><a href="monospace-design-showcase.html">Monospace Design System Showcase</a></h2>
+    <!-- Posts Container -->
+    <div id="posts-container">
         
+        <article>
+            <h2><a href="welcome-to-my-blog.html">Welcome to My Markdown Blog</a></h2>
+            
+            <div class="grid">
+                <p>
+                    <time datetime="2024-01-15">
+                        2024-01-15
+                    </time>
+                    
+                    · by Blog Author
+                    
+                </p>
+                
+                <p>
+                    Tags: 
+                    
+                        <button class="tag-link" data-tag="welcome">welcome</button>, 
+                    
+                        <button class="tag-link" data-tag="markdown">markdown</button>, 
+                    
+                        <button class="tag-link" data-tag="github-actions">github-actions</button>, 
+                    
+                        <button class="tag-link" data-tag="blogging">blogging</button>
+                    
+                </p>
+                
+            </div>
+            
+            <p>An introduction to this blog and how it's built with markdown files and GitHub Actions</p>
+            
+            
+            <figure>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Adams_The_Tetons_and_the_Snake_River.jpg/640px-Adams_The_Tetons_and_the_Snake_River.jpg" alt="Welcome to My Markdown Blog" loading="lazy">
+                
+                <figcaption>The Tetons and the Snake River</figcaption>
+                
+            </figure>
+            
+            
+            <p><a href="welcome-to-my-blog.html">Read more →</a></p>
+        </article>
+        
+        <hr>
+        
+        <article>
+            <h2><a href="monospace-design-showcase.html">Monospace Design System Showcase</a></h2>
+            
+            <div class="grid">
+                <p>
+                    <time datetime="2024-01-12">
+                        2024-01-12
+                    </time>
+                    
+                    · by Blog Author
+                    
+                </p>
+                
+                <p>
+                    Tags: 
+                    
+                        <button class="tag-link" data-tag="design">design</button>, 
+                    
+                        <button class="tag-link" data-tag="monospace">monospace</button>, 
+                    
+                        <button class="tag-link" data-tag="css">css</button>, 
+                    
+                        <button class="tag-link" data-tag="typography">typography</button>
+                    
+                </p>
+                
+            </div>
+            
+            <p>A comprehensive demonstration of the utility classes and components available in our monospace web design system</p>
+            
+            
+            
+            <p><a href="monospace-design-showcase.html">Read more →</a></p>
+        </article>
+        
+        <hr>
+        
+        <article>
+            <h2><a href="building-with-github-actions.html">Building Automated Workflows with GitHub Actions</a></h2>
+            
+            <div class="grid">
+                <p>
+                    <time datetime="2024-01-10">
+                        2024-01-10
+                    </time>
+                    
+                    · by Blog Author
+                    
+                </p>
+                
+                <p>
+                    Tags: 
+                    
+                        <button class="tag-link" data-tag="github-actions">github-actions</button>, 
+                    
+                        <button class="tag-link" data-tag="ci-cd">ci-cd</button>, 
+                    
+                        <button class="tag-link" data-tag="automation">automation</button>, 
+                    
+                        <button class="tag-link" data-tag="devops">devops</button>
+                    
+                </p>
+                
+            </div>
+            
+            <p>Learn how to automate your development workflow using GitHub Actions for continuous integration and deployment</p>
+            
+            
+            
+            <p><a href="building-with-github-actions.html">Read more →</a></p>
+        </article>
+        
+        <hr>
+        
+        <article>
+            <h2><a href="about.html">About This Blog</a></h2>
+            
+            <div class="grid">
+                <p>
+                    <time datetime="2024-01-01">
+                        2024-01-01
+                    </time>
+                    
+                    · by Blog Author
+                    
+                </p>
+                
+            </div>
+            
+            <p>Learn more about this markdown-powered blog and its creator</p>
+            
+            
+            
+            <p><a href="about.html">Read more →</a></p>
+        </article>
+        
+        
+        
+    </div>
+    
+    <!-- Pagination Controls -->
+    <div class="pagination-controls">
+        <hr>
         <div class="grid">
-            <p>
-                <time datetime="2024-01-12">
-                    2024-01-12
-                </time>
-                
-                · by Blog Author
-                
-            </p>
-            
-            <p>
-                Tags: 
-                
-                    <code>design</code>, 
-                
-                    <code>monospace</code>, 
-                
-                    <code>css</code>, 
-                
-                    <code>typography</code>
-                
-            </p>
-            
+            <div class="width-auto">
+                <p class="pagination-info">
+                    Showing <span class="current-start">1</span>-<span class="current-end">4</span> 
+                    of <span class="total-posts">4</span> posts
+                </p>
+            </div>
+            <div class="width-min">
+                <nav class="pagination">
+                    <button class="pagination-btn" id="prev-page" disabled>← Previous</button>
+                    <span class="pagination-pages">
+                        Page <span class="current-page">1</span> of <span class="total-pages">1</span>
+                    </span>
+                    <button class="pagination-btn" id="next-page" disabled>Next →</button>
+                </nav>
+            </div>
         </div>
-        
-        <p>A comprehensive demonstration of the utility classes and components available in our monospace web design system</p>
-        
-        
-        
-        <p><a href="monospace-design-showcase.html">Read more →</a></p>
-    </article>
-    
-    <hr>
-    
-    <article>
-        <h2><a href="building-with-github-actions.html">Building Automated Workflows with GitHub Actions</a></h2>
-        
-        <div class="grid">
-            <p>
-                <time datetime="2024-01-10">
-                    2024-01-10
-                </time>
-                
-                · by Blog Author
-                
-            </p>
-            
-            <p>
-                Tags: 
-                
-                    <code>github-actions</code>, 
-                
-                    <code>ci-cd</code>, 
-                
-                    <code>automation</code>, 
-                
-                    <code>devops</code>
-                
-            </p>
-            
-        </div>
-        
-        <p>Learn how to automate your development workflow using GitHub Actions for continuous integration and deployment</p>
-        
-        
-        
-        <p><a href="building-with-github-actions.html">Read more →</a></p>
-    </article>
-    
-    <hr>
-    
-    <article>
-        <h2><a href="about.html">About This Blog</a></h2>
-        
-        <div class="grid">
-            <p>
-                <time datetime="2024-01-01">
-                    2024-01-01
-                </time>
-                
-                · by Blog Author
-                
-            </p>
-            
-        </div>
-        
-        <p>Learn more about this markdown-powered blog and its creator</p>
-        
-        
-        
-        <p><a href="about.html">Read more →</a></p>
-    </article>
-    
-    
+    </div>
     
 
 
@@ -207,5 +275,175 @@
 
     <script src="static/grid.js"></script>
     
+<script>
+// Blog pagination and filtering functionality
+class BlogPagination {
+    constructor() {
+        this.posts = [];
+        this.filteredPosts = [];
+        this.currentPage = 1;
+        this.postsPerPage = 20;
+        this.currentTag = null;
+        
+        this.loadPosts();
+        this.initEventListeners();
+    }
+    
+    async loadPosts() {
+        try {
+            const response = await fetch('static/posts.json');
+            this.posts = await response.json();
+            this.filteredPosts = [...this.posts];
+        } catch (error) {
+            console.error('Error loading posts:', error);
+        }
+    }
+    
+    initEventListeners() {
+        // Pagination buttons
+        document.getElementById('prev-page').addEventListener('click', () => {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.renderPage();
+            }
+        });
+        
+        document.getElementById('next-page').addEventListener('click', () => {
+            const totalPages = Math.ceil(this.filteredPosts.length / this.postsPerPage);
+            if (this.currentPage < totalPages) {
+                this.currentPage++;
+                this.renderPage();
+            }
+        });
+        
+        // Tag filters
+        document.querySelectorAll('.tag-filter, .tag-link').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const tag = e.target.dataset.tag;
+                this.filterByTag(tag);
+            });
+        });
+        
+        // Clear filters
+        document.querySelector('.clear-filters').addEventListener('click', () => {
+            this.clearFilters();
+        });
+    }
+    
+    filterByTag(tag) {
+        this.currentTag = tag;
+        this.currentPage = 1;
+        this.filteredPosts = this.posts.filter(post => 
+            post.tags && post.tags.includes(tag)
+        );
+        
+        // Update UI
+        document.querySelector('.active-filter').style.display = 'block';
+        document.querySelector('.current-tag').textContent = tag;
+        
+        // Highlight active tag filter
+        document.querySelectorAll('.tag-filter').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tag === tag);
+        });
+        
+        this.renderPage();
+    }
+    
+    clearFilters() {
+        this.currentTag = null;
+        this.currentPage = 1;
+        this.filteredPosts = [...this.posts];
+        
+        // Update UI
+        document.querySelector('.active-filter').style.display = 'none';
+        document.querySelectorAll('.tag-filter').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        this.renderPage();
+    }
+    
+    renderPage() {
+        const start = (this.currentPage - 1) * this.postsPerPage;
+        const end = start + this.postsPerPage;
+        const postsToShow = this.filteredPosts.slice(start, end);
+        
+        this.renderPosts(postsToShow);
+        this.updatePaginationInfo();
+    }
+    
+    renderPosts(posts) {
+        const container = document.getElementById('posts-container');
+        
+        if (posts.length === 0) {
+            container.innerHTML = `
+                <article>
+                    <h2>No posts found</h2>
+                    <p>No posts match the current filter. <button class="clear-filters" onclick="blogPagination.clearFilters()">Clear filters</button> to see all posts.</p>
+                </article>
+            `;
+            return;
+        }
+        
+        container.innerHTML = posts.map((post, index) => `
+            <article>
+                <h2><a href="${post.url}">${post.title}</a></h2>
+                
+                <div class="grid">
+                    <p>
+                        <time datetime="${post.date}">${post.date}</time>
+                        ${post.author ? `· by ${post.author}` : ''}
+                    </p>
+                    ${post.tags && post.tags.length > 0 ? `
+                    <p>
+                        Tags: 
+                        ${post.tags.map(tag => `<button class="tag-link" data-tag="${tag}" onclick="blogPagination.filterByTag('${tag}')">${tag}</button>`).join(', ')}
+                    </p>
+                    ` : ''}
+                </div>
+                
+                <p>${post.description}</p>
+                
+                ${post.image ? `
+                <figure>
+                    <img src="${post.image}" alt="${post.title}" loading="lazy">
+                    ${post.caption ? `<figcaption>${post.caption}</figcaption>` : ''}
+                </figure>
+                ` : ''}
+                
+                <p><a href="${post.url}">Read more →</a></p>
+            </article>
+            ${index < posts.length - 1 ? '<hr>' : ''}
+        `).join('');
+    }
+    
+    updatePaginationInfo() {
+        const totalPages = Math.ceil(this.filteredPosts.length / this.postsPerPage);
+        const start = (this.currentPage - 1) * this.postsPerPage + 1;
+        const end = Math.min(this.currentPage * this.postsPerPage, this.filteredPosts.length);
+        
+        // Update pagination info
+        document.querySelector('.current-start').textContent = start;
+        document.querySelector('.current-end').textContent = end;
+        document.querySelector('.total-posts').textContent = this.filteredPosts.length;
+        document.querySelector('.current-page').textContent = this.currentPage;
+        document.querySelector('.total-pages').textContent = totalPages;
+        
+        // Update button states
+        document.getElementById('prev-page').disabled = this.currentPage === 1;
+        document.getElementById('next-page').disabled = this.currentPage === totalPages;
+        
+        // Hide pagination if only one page
+        const paginationControls = document.querySelector('.pagination-controls');
+        paginationControls.style.display = totalPages <= 1 ? 'none' : 'block';
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.blogPagination = new BlogPagination();
+});
+</script>
+
 </body>
 </html> 

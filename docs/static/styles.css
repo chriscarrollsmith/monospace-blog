@@ -585,3 +585,103 @@ label input {
 .debug-toggle-label {
   text-align: right;
 }
+
+/* PAGINATION AND FILTERING STYLES */
+
+.filter-controls {
+  margin-bottom: calc(var(--line-height) * 2);
+}
+
+.tag-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--line-height) / 2) 1ch;
+  margin-top: calc(var(--line-height) / 2);
+}
+
+.tag-filter,
+.tag-link {
+  background: var(--background-color);
+  border: var(--border-thickness) solid var(--text-color);
+  color: var(--text-color);
+  padding: calc(var(--line-height) / 4) calc(1ch / 2);
+  font-family: var(--font-family);
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  text-transform: none;
+  height: auto;
+  line-height: 1;
+  min-height: calc(var(--line-height) / 2);
+}
+
+.tag-filter:hover,
+.tag-link:hover {
+  background: var(--background-color-alt);
+}
+
+.tag-filter.active {
+  background: var(--text-color);
+  color: var(--background-color);
+}
+
+.tag-link {
+  border: none;
+  text-decoration: underline;
+  text-decoration-thickness: var(--border-thickness);
+  background: transparent;
+  padding: 0;
+  font-weight: inherit;
+}
+
+.tag-link:hover {
+  background: transparent;
+  text-decoration-thickness: calc(var(--border-thickness) * 2);
+}
+
+.clear-filters {
+  min-width: 8ch;
+}
+
+.active-filter {
+  margin-top: var(--line-height);
+  padding: calc(var(--line-height) / 2) 1ch;
+  border: var(--border-thickness) solid var(--text-color);
+  background: color-mix(in srgb, var(--text-color) 5%, var(--background-color) 95%);
+}
+
+.pagination-controls {
+  margin-top: calc(var(--line-height) * 2);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 1ch;
+  text-align: right;
+}
+
+.pagination-btn {
+  min-width: 8ch;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--background-color);
+}
+
+.pagination-btn:disabled:hover {
+  background: var(--background-color);
+  transform: none;
+}
+
+.pagination-pages {
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+.pagination-info {
+  font-weight: var(--font-weight-medium);
+  margin-bottom: 0;
+}
