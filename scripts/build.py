@@ -19,6 +19,14 @@ class BlogGenerator:
         self.output_dir = output_dir
         self.static_dir = static_dir
         
+        # Site configuration from environment variables
+        self.config = {
+            'site_title': os.getenv('SITE_TITLE', 'My Blog'),
+            'site_description': os.getenv('SITE_DESCRIPTION', 'A blog generated from markdown files'),
+            'copyright_year': os.getenv('COPYRIGHT_YEAR', str(datetime.now().year)),
+            'include_debug': os.getenv('INCLUDE_DEBUG', 'true').lower() in ('true', '1', 'yes', 'on')
+        }
+        
         # Setup Jinja2 environment
         self.env = Environment(loader=FileSystemLoader(templates_dir))
     
@@ -122,7 +130,8 @@ class BlogGenerator:
             title=post['metadata']['title'],
             content=post['content'],
             metadata=post['metadata'],
-            post=post
+            post=post,
+            **self.config  # Pass all config values to template
         )
         
         output_path = os.path.join(self.output_dir, post['metadata']['url'])
@@ -137,8 +146,7 @@ class BlogGenerator:
         
         html = template.render(
             posts=posts,
-            site_title="My Blog",
-            site_description="A blog generated from markdown files"
+            **self.config  # Pass all config values to template
         )
         
         output_path = os.path.join(self.output_dir, 'index.html')
@@ -181,6 +189,7 @@ class BlogGenerator:
     def build(self):
         """Build the entire blog."""
         print("Starting blog build...")
+        print(f"Config: {self.config}")
         
         # Clean and setup output directory
         self.clean_output_dir()

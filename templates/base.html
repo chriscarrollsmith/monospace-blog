@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{{ site_title or "My Blog" }}{% endblock %}</title>
+    <title>{% block title %}{{ site_title }}{% endblock %}</title>
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="{% block description %}{{ site_description or "A blog generated from markdown files" }}{% endblock %}">
+    <meta name="description" content="{% block description %}{{ site_description }}{% endblock %}">
     <meta name="author" content="{% block author %}{{ metadata.author if metadata else '' }}{% endblock %}">
     
     <!-- Open Graph / Facebook -->
@@ -33,12 +33,14 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
+    {% if include_debug %}
     <!-- Debug grid toggle -->
     <div class="debug-grid"></div>
+    {% endif %}
     
     <header class="grid">
         <h1 class="width-auto">
-            <a href="index.html">{{ site_title or "My Blog" }}</a>
+            <a href="index.html">{{ site_title }}</a>
         </h1>
         <nav class="width-min">
             <a href="index.html">Home</a><br/>
@@ -52,14 +54,18 @@
 
     <footer>
         <hr>
-        <p>&copy; 2024 {{ site_title or "My Blog" }}. Generated from Markdown.</p>
+        <p>&copy; {{ copyright_year }} {{ site_title }}. Generated from Markdown.</p>
         
+        {% if include_debug %}
         <label class="debug-toggle-label">
             <input type="checkbox" class="debug-toggle"> Debug grid
         </label>
+        {% endif %}
     </footer>
 
+    {% if include_debug %}
     <script src="static/grid.js"></script>
+    {% endif %}
     {% block extra_scripts %}{% endblock %}
 </body>
 </html> 
