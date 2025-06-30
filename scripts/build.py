@@ -13,8 +13,9 @@ import re
 
 
 class BlogGenerator:
-    def __init__(self, posts_dir='posts', templates_dir='templates', output_dir='docs', static_dir='static'):
+    def __init__(self, posts_dir='posts', pages_dir='pages', templates_dir='templates', output_dir='docs', static_dir='static'):
         self.posts_dir = posts_dir
+        self.pages_dir = pages_dir
         self.templates_dir = templates_dir
         self.output_dir = output_dir
         self.static_dir = static_dir
@@ -87,6 +88,32 @@ class BlogGenerator:
             'filepath': filepath
         }
     
+    def parse_page(self, filepath):
+        """Parse a markdown page with frontmatter."""
+        with open(filepath, 'r', encoding='utf-8') as f:
+            page = frontmatter.load(f)
+        
+        # Convert markdown content to HTML
+        html_content = mistletoe.markdown(page.content)
+        
+        # Extract metadata
+        metadata = page.metadata.copy()
+        
+        # Ensure required fields
+        if 'title' not in metadata:
+            metadata['title'] = os.path.splitext(os.path.basename(filepath))[0]
+        
+        # Generate slug from filename
+        slug = os.path.splitext(os.path.basename(filepath))[0]
+        metadata['slug'] = slug
+        metadata['url'] = f"{slug}.html"
+        
+        return {
+            'content': html_content,
+            'metadata': metadata,
+            'filepath': filepath
+        }
+    
     def get_all_posts(self):
         """Get all posts, sorted by date (newest first)."""
         posts = []
@@ -114,6 +141,38 @@ class BlogGenerator:
         posts.sort(key=lambda x: x['metadata']['date'], reverse=True)
         return posts
     
+    def get_pages(self):
+        """Get all pages."""
+        pages = {}
+        
+        if not os.path.exists(self.pages_dir):
+            print(f"Pages directory '{self.pages_dir}' not found. Creating it...")
+            os.makedirs(self.pages_dir, exist_ok=True)
+            return pages
+        
+        for filename in os.listdir(self.pages_dir):
+            if filename.endswith('.md'):
+                filepath = os.path.join(self.pages_dir, filename)
+                try:
+                    page = self.parse_page(filepath)
+                    slug = page['metadata']['slug']
+                    pages[slug] = page
+                except Exception as e:
+                    print(f"Error parsing {filename}: {e}")
+        
+        return pages
+    
+    def get_site_config(self, pages):
+        """Extract site configuration from index.md frontmatter."""
+        index_page = pages.get('index', {})
+        index_metadata = index_page.get('metadata', {})
+        
+        return {
+            'site_title': index_metadata.get('site_title', index_metadata.get('title', 'My Blog')),
+            'site_description': index_metadata.get('site_description', index_metadata.get('description', 'A blog generated from markdown files')),
+            'copyright_year': index_metadata.get('copyright_year', '2024')
+        }
+    
     def generate_post_html(self, post):
         """Generate HTML for a single post."""
         template = self.env.get_template('post.html')
@@ -131,14 +190,20 @@ class BlogGenerator:
         
         print(f"Generated: {post['metadata']['url']}")
     
-    def generate_index_html(self, posts):
+    def generate_index_html(self, posts, pages, site_config):
         """Generate the homepage with post previews."""
         template = self.env.get_template('index.html')
         
+        # Get index page content and metadata
+        index_page = pages.get('index', {})
+        page_content = index_page.get('content', '')
+        page_metadata = index_page.get('metadata', {})
+        
         html = template.render(
             posts=posts,
-            site_title="My Blog",
-            site_description="A blog generated from markdown files"
+            page_content=page_content,
+            page_metadata=page_metadata,
+            **site_config
         )
         
         output_path = os.path.join(self.output_dir, 'index.html')
@@ -146,6 +211,30 @@ class BlogGenerator:
             f.write(html)
         
         print("Generated: index.html")
+    
+    def generate_page_html(self, page, site_config):
+        """Generate HTML for a single page."""
+        metadata = page['metadata']
+        template_name = metadata.get('template', f"{metadata['slug']}.html")
+        
+        try:
+            template = self.env.get_template(template_name)
+        except:
+            # Fallback to a generic page template or post template
+            print(f"Template {template_name} not found, using post.html as fallback")
+            template = self.env.get_template('post.html')
+        
+        html = template.render(
+            content=page['content'],
+            metadata=metadata,
+            **site_config
+        )
+        
+        output_path = os.path.join(self.output_dir, metadata['url'])
+        with open(output_path, 'w', encoding='utf-8') as f:
+            f.write(html)
+        
+        print(f"Generated: {metadata['url']}")
     
     def generate_sitemap(self, posts):
         """Generate a sitemap.xml file."""
@@ -188,21 +277,29 @@ class BlogGenerator:
         # Copy static files
         self.copy_static_files()
         
-        # Get all posts
+        # Get all posts and pages
         posts = self.get_all_posts()
-        print(f"Found {len(posts)} posts")
+        pages = self.get_pages()
+        site_config = self.get_site_config(pages)
+        
+        print(f"Found {len(posts)} posts and {len(pages)} pages")
         
         # Generate individual post pages
         for post in posts:
             self.generate_post_html(post)
         
+        # Generate individual page HTML (excluding index, which is handled separately)
+        for slug, page in pages.items():
+            if slug != 'index':  # Skip index page as it's handled by generate_index_html
+                self.generate_page_html(page, site_config)
+        
         # Generate homepage
-        self.generate_index_html(posts)
+        self.generate_index_html(posts, pages, site_config)
         
         # Generate sitemap
         self.generate_sitemap(posts)
         
-        print(f"Blog build complete! Generated {len(posts)} posts + homepage")
+        print(f"Blog build complete! Generated {len(posts)} posts + {len(pages)} pages + homepage")
 
 if __name__ == '__main__':
     generator = BlogGenerator()

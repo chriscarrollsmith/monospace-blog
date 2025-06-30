@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}{{ site_title or "My Blog" }}{% endblock %}
-{% block description %}{{ site_description or "A blog generated from markdown files" }}{% endblock %}
+{% block title %}{{ page_metadata.title or site_title or "My Blog" }}{% endblock %}
+{% block description %}{{ page_metadata.description or site_description or "A blog generated from markdown files" }}{% endblock %}
 
 {% block content %}
+{% if page_content %}
+<article class="page-content">
+    {{ page_content | safe }}
+</article>
+<hr>
+{% endif %}
+
 {% if posts %}
     {% for post in posts %}
     <article>

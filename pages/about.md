@@ -1,8 +1,8 @@
 ---
 title: About This Blog
 description: Learn more about this markdown-powered blog and its creator
-date: 2024-01-01
 author: Blog Author
+template: about.html
 ---
 
 # About This Blog
@@ -43,4 +43,4 @@ The source code for this blog is available on GitHub. Feel free to fork it and c
 
 ---
 
-*Thanks for visiting!* 
+*Thanks for visiting!*
