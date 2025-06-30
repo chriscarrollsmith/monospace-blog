@@ -342,10 +342,23 @@ figure pre {
 
 pre, code {
   font-family: var(--font-family);
+  background: var(--background-color-alt);
+  border: 1px dotted var(--text-color-alt);
 }
 
 code {
   font-weight: var(--font-weight-medium);
+  padding: 0 0.25ch;
+}
+
+pre {
+  padding: calc(var(--line-height) / 2) 1ch;
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
 }
 
 figure {
