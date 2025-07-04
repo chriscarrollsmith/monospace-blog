@@ -48,7 +48,7 @@
         <p>
             Tags: 
             {% for tag in metadata.tags %}
-                <code>{{ tag }}</code>{% if not loop.last %}, {% endif %}
+                {{ tag }}{% if not loop.last %}, {% endif %}
             {% endfor %}
         </p>
         {% endif %}

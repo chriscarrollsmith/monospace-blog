@@ -22,7 +22,7 @@
             <p>
                 Tags: 
                 {% for tag in post.metadata.tags %}
-                    <code>{{ tag }}</code>{% if not loop.last %}, {% endif %}
+                    {{ tag }}{% if not loop.last %}, {% endif %}
                 {% endfor %}
             </p>
             {% endif %}
