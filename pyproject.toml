@@ -13,6 +13,7 @@ dependencies = [
     "python-frontmatter>=1.0.0",
     "Pillow>=10.1.0",
     "mistletoe>=1.4.0",
+    "python-dotenv>=1.1.1",
 ]
 
 [project.urls]

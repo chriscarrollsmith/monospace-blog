@@ -33,8 +33,10 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <!-- Debug grid toggle -->
+    {% if show_debug_toggle %}
+    <!-- Debug grid canvas -->
     <div class="debug-grid"></div>
+    {% endif %}
     
     <header class="grid">
         <h1 class="width-auto">
@@ -54,9 +56,11 @@
         <hr>
         <p>&copy; 2024 {{ site_title or "My Blog" }}. Generated from Markdown.</p>
         
+        {% if show_debug_toggle %}
         <label class="debug-toggle-label">
             <input type="checkbox" class="debug-toggle"> Debug grid
         </label>
+        {% endif %}
     </footer>
 
     <script src="static/grid.js"></script>

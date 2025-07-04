@@ -71,6 +71,38 @@ The build script automatically generates:
 
 This project's markdown renderer uses the [CommonMark specification](https://commonmark.org/). CommonMark offers a helpful 60-second [tutorial](https://commonmark.org/help/) that you may find helpful if you're new to Markdown.
 
+## Configuration
+
+The blog generator supports configuration through environment variables, which can be set in a `.env` file or passed as command-line arguments.
+
+### Environment Variables
+
+Copy `.env.example` to `.env` to customize your configuration:
+
+```bash
+cp .env.example .env
+```
+
+Available variables:
+
+- **`SHOW_DEBUG`** - Controls whether debug grid toggle interface is displayed on pages
+  - Default: `true` (debug toggle interface shown)
+  - Note: This controls the checkbox visibility; the actual debug grid is toggled by users clicking the checkbox
+
+### Command Line Options
+
+You can also control debug grid toggle using command-line arguments:
+
+```bash
+# Hide debug toggle
+uv run scripts/build.py --no-debug
+
+# Show debug toggle
+uv run scripts/build.py --debug
+```
+
+Command-line arguments take precedence over environment variables.
+
 ## Development
 
 1. Clone this repository:

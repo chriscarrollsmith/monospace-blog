@@ -10,14 +10,26 @@ import mistletoe
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 import re
+import argparse
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class BlogGenerator:
-    def __init__(self, posts_dir='posts', templates_dir='templates', output_dir='docs', static_dir='static'):
+    def __init__(
+        self,
+        posts_dir: str = 'posts',
+        templates_dir: str = 'templates',
+        output_dir: str = 'docs',
+        static_dir: str = 'static',
+        show_debug_toggle: bool = True,
+    ):
         self.posts_dir = posts_dir
         self.templates_dir = templates_dir
         self.output_dir = output_dir
         self.static_dir = static_dir
+        self.show_debug_toggle = show_debug_toggle
         
         # Setup Jinja2 environment
         self.env = Environment(loader=FileSystemLoader(templates_dir))
@@ -122,7 +134,8 @@ class BlogGenerator:
             title=post['metadata']['title'],
             content=post['content'],
             metadata=post['metadata'],
-            post=post
+            post=post,
+            show_debug_toggle=self.show_debug_toggle
         )
         
         output_path = os.path.join(self.output_dir, post['metadata']['url'])
@@ -138,7 +151,8 @@ class BlogGenerator:
         html = template.render(
             posts=posts,
             site_title="My Blog",
-            site_description="A blog generated from markdown files"
+            site_description="A blog generated from markdown files",
+            show_debug_toggle=self.show_debug_toggle
         )
         
         output_path = os.path.join(self.output_dir, 'index.html')
@@ -204,6 +218,44 @@ class BlogGenerator:
         
         print(f"Blog build complete! Generated {len(posts)} posts + homepage")
 
+def parse_args():
+    """Parse command line arguments."""
+    parser = argparse.ArgumentParser(description='Build the markdown blog')
+    parser.add_argument(
+        '--debug', 
+        dest='show_debug_toggle',
+        action='store_true',
+        help='Show debug grid toggle (default: True, can be overridden by SHOW_DEBUG env var)'
+    )
+    parser.add_argument(
+        '--no-debug', 
+        dest='show_debug_toggle',
+        action='store_false',
+        help='Hide debug grid toggle'
+    )
+    parser.set_defaults(show_debug_toggle=None)
+    return parser.parse_args()
+
+
+def get_debug_toggle_setting(args):
+    """Get the debug toggle setting from environment variable or command line."""
+    # Priority: command line arg > environment variable > default (True)
+    if args.show_debug_toggle is not None:
+        return args.show_debug_toggle
+    
+    env_value = os.environ.get('SHOW_DEBUG', '').lower()
+    if env_value in ('true', '1'):
+        return True
+    elif env_value in ('false', '0'):
+        return False
+    
+    # Default to True (show debug toggle)
+    return True
+
+
 if __name__ == '__main__':
-    generator = BlogGenerator()
+    args = parse_args()
+    show_debug_toggle = get_debug_toggle_setting(args)
+    
+    generator = BlogGenerator(show_debug_toggle=show_debug_toggle)
     generator.build() 
